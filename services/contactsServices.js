@@ -28,7 +28,7 @@ export async function removeContact(contactId) {
   return result;
 }
 
-export async function addContact(id, name, email, phone) {
+export async function addContact({ name, email, phone }) {
   const contacts = await listContacts();
   const newContact = {
     id: nanoid(),
@@ -39,4 +39,15 @@ export async function addContact(id, name, email, phone) {
   contacts.push(newContact);
   await updateContacts(contacts);
   return newContact;
+}
+
+export async function updateContactService(id, contactData) {
+  const contacts = await listContacts();
+  const currentIndex = contacts.findIndex((item) => item.id === id);
+  if (currentIndex === -1) {
+    return null;
+  }
+  contacts[currentIndex] = { ...contacts[currentIndex], ...contactData };
+  await updateContacts(contacts);
+  return contacts[currentIndex];
 }
