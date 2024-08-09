@@ -14,7 +14,7 @@ import {
 
 export const getAllContacts = async (req, res, next) => {
   try {
-    const contacts = await listContacts();
+    const contacts = await listContacts(); // await contactsService.getAllContacts()
     res.status(200).json(contacts);
   } catch (error) {
     next(error);
