@@ -1,13 +1,11 @@
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
-import "dotenv/config.js";
+import "dotenv/config";
 
-import { sequelize } from "./db/sequelize.js";
+import sequelize from "./db/sequelize.js";
 
 import contactsRouter from "./routes/contactsRouter.js";
-
-// dotenv.config();
 
 const app = express();
 
