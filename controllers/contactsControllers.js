@@ -12,7 +12,7 @@ import {
   updateContactSchema,
 } from "../schemas/contactsSchemas.js";
 
-export const getAllContacts = async (req, res, next) => {
+export const getAllContacts = async (_, res, next) => {
   try {
     const contacts = await listContacts(); // await contactsService.getAllContacts()
     res.status(200).json(contacts);

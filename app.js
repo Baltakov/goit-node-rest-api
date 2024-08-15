@@ -24,11 +24,14 @@ app.use((err, req, res, next) => {
   res.status(status).json({ message });
 });
 
+const { SERVER_PORT } = process.env;
+const port = Number(SERVER_PORT);
+
 try {
   await sequelize.authenticate();
   console.log("Success connect to DB");
-  app.listen(3000, () => {
-    console.log("Server is running. Use our API on port: 3000");
+  app.listen(port, () => {
+    console.log(`Server is running. Use our API on port: ${port}`);
   });
 } catch (error) {
   console.log(error.message);
