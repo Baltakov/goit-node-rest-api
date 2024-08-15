@@ -1,9 +1,11 @@
-import HttpError from "./HttpError.js";
+import HttpError from "../helpers/HttpError.js";
+import { ValidationError } from "sequelize";
 
 const validateBody = (schema) => {
   const func = (req, _, next) => {
     const { error } = schema.validate(req.body);
-    if (error) {
+    if (error instanceof ValidationError) {
+      // error.status = 400;
       next(HttpError(400, error.message));
     }
     next();

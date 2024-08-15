@@ -14,7 +14,7 @@ import {
 
 export const getAllContacts = async (_, res, next) => {
   try {
-    const contacts = await listContacts(); // await contactsService.getAllContacts()
+    const contacts = listContacts();
     res.status(200).json(contacts);
   } catch (error) {
     next(error);
@@ -53,7 +53,7 @@ export const createContact = async (req, res, next) => {
     if (error) {
       throw HttpError(400, error.message);
     }
-    const contact = await addContact(req.body);
+    const contact = addContact(req.body);
     res.status(201).json(contact);
   } catch (error) {
     next(error);
