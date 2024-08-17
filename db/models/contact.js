@@ -9,8 +9,12 @@ const Contact = sequelize.define("contact", {
   },
   email: DataTypes.STRING,
   phone: DataTypes.STRING,
+  favorite: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
 });
 
-// Contact.sync();
+// Contact.sync({ force: true });
 
 export default Contact;

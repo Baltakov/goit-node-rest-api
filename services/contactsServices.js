@@ -1,29 +1,32 @@
 import Contact from "../db/models/contact.js";
 
 export function listContacts() {
-  Contact.findAll();
+  return Contact.findAll();
 }
 
 export function getContactById(contactId) {
-  Contact.findByPk(id);
+  return Contact.findByPk(contactId);
 }
 
-export async function removeContact(contactId) {
-  Contact.destroy({
+export async function removeContact(id) {
+  return Contact.destroy({
     where: {
-      contactId,
+      id,
     },
   });
 }
 
 export function addContact({ name, email, phone }) {
-  Contact.create({ name, email, phone });
+  return Contact.create({ name, email, phone });
 }
 
 export async function updateContactService(id, contactData) {
-  Contact.update(contactData, {
-    where: {
-      id,
-    },
+  console.log("text: ", id);
+  const contact = await getContactById(id);
+  if (!contact) {
+    return null;
+  }
+  return contact.update(contactData, {
+    returning: true,
   });
 }
