@@ -7,14 +7,15 @@ import ctrlWrapper from "../decorators/ctrlWrapper.js";
 
 import HttpError from "../helpers/HttpError.js";
 
-import { useInflection } from "sequelize";
+// import { useInflection } from "sequelize";
 
 const { JWT_SECRET } = process.env;
 
 const signup = async (req, res) => {
   const newUser = await authServices.signup(req.body);
+  console.log(newUser);
   res.status(201).json({
-    email: newUser.email,
+    user: { email: newUser.email, subscription: newUser.subscription },
   });
 };
 
@@ -37,10 +38,13 @@ const signin = async (req, res) => {
 
   res.json({
     token,
+    user: { email: user.email, subscription: user.subscription },
   });
 };
+const getCurrentUser = (req, res) => {};
 
 export default {
   signup: ctrlWrapper(signup),
   signin: ctrlWrapper(signin),
+  getCurrentUser: ctrlWrapper(getCurrentUser),
 };
