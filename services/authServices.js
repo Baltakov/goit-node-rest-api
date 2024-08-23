@@ -22,3 +22,13 @@ export const signup = async (data) => {
     throw error;
   }
 };
+
+export const updateUser = async (query, data) => {
+  const user = await findUser(query);
+  if (!user) {
+    return null;
+  }
+  return user.update(data, {
+    returning: true,
+  });
+};

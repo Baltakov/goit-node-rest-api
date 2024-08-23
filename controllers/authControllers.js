@@ -35,13 +35,16 @@ const signin = async (req, res) => {
   };
 
   const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "24h" });
-
+  await authServices.updateUser({ id: user.id }, { token });
   res.json({
     token,
     user: { email: user.email, subscription: user.subscription },
   });
 };
-const getCurrentUser = (req, res) => {};
+const getCurrentUser = (req, res) => {
+  const { email, subscription } = req.user;
+  res.json({ email, subscription });
+};
 
 export default {
   signup: ctrlWrapper(signup),

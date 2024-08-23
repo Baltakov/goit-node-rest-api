@@ -14,7 +14,7 @@ const authRouter = Router();
 
 authRouter.post("/signup", signupMiddleware, authControllers.signup);
 
-authRouter.post("/signin", signupMiddleware, authControllers.signin);
+authRouter.post("/login", signupMiddleware, authControllers.signin);
 
 authRouter.get("/current", authenticate, authControllers.getCurrentUser);
 
