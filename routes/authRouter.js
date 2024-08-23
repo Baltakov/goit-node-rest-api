@@ -12,7 +12,7 @@ const signupMiddleware = validateBody(authSignupSchema);
 
 const authRouter = Router();
 
-authRouter.post("/signup", signupMiddleware, authControllers.signup);
+authRouter.post("/register", signupMiddleware, authControllers.signup);
 
 authRouter.post("/login", signupMiddleware, authControllers.signin);
 
