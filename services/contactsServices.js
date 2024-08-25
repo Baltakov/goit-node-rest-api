@@ -1,28 +1,24 @@
 import Contact from "../models/Contacts.js";
 
 function listContacts(search = {}) {
-  const { filter = {} } = search;
-  return Contact.find(filter);
+  const { filter = {}, fields = "", settings = {} } = search;
+  return Contact.find(filter, fields, settings);
 }
 
-function getContactById(contactId) {
-  return Contact.find({ _id: contactId });
+function getContactById(contactId, owner) {
+  return Contact.findOne({ _id: contactId, owner });
 }
 
-function removeContact(contactId) {
-  return Contact.findByIdAndDelete(contactId);
+function removeContact(contactId, owner) {
+  return Contact.findOneAndDelete({ _id: contactId, owner });
 }
 
 function addContact(data) {
   return Contact.create(data);
 }
 
-function updateContact(contactId, data) {
-  return Contact.findByIdAndUpdate(contactId, data);
-}
-
-function updateStatusContact(contactId, data) {
-  return Contact.findByIdAndUpdate(contactId, data);
+function updateContact(contactId, owner, data) {
+  return Contact.findOneAndUpdate({ _id: contactId, owner }, data);
 }
 
 export default {
@@ -31,5 +27,4 @@ export default {
   removeContact,
   addContact,
   updateContact,
-  updateStatusContact,
 };

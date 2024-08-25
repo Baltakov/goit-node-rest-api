@@ -1,6 +1,6 @@
 import HttpError from "../helpers/HttpError.js";
 import contactsService from "../services/contactsServices.js";
-import { tryCatchWrapper } from "../helpers/tryCathWrapper.js";
+import { tryCatchWrapper } from "../helpers/tryCatchWrapper.js";
 
 const handleResult = (result) => {
   if (!result || result.length === 0) {
