@@ -1,8 +1,12 @@
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
 
 import contactsRouter from "./routes/contactsRouter.js";
+
+dotenv.config();
 
 const app = express();
 
@@ -21,6 +25,18 @@ app.use((err, req, res, next) => {
   res.status(status).json({ message });
 });
 
-app.listen(3000, () => {
-  console.log("Server is running. Use our API on port: 3000");
-});
+const connection = mongoose.connect(DB_HOST);
+
+const { SERVER_PORT } = process.env;
+const port = Number(SERVER_PORT);
+
+connection;
+try {
+  await sequelize.authenticate();
+  console.log("Success connect to DB");
+  app.listen(port, () => {
+    console.log(`Server is running. Use our API on port: ${port}`);
+  });
+} catch (error) {
+  console.log(error.message);
+}
