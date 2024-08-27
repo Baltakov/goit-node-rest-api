@@ -7,13 +7,14 @@ import ctrlWrapper from "../decorators/ctrlWrapper.js";
 
 import HttpError from "../helpers/HttpError.js";
 
+import { listContacts } from "../services/contactsServices.js";
+
 // import { useInflection } from "sequelize";
 
 const { JWT_SECRET } = process.env;
 
 const signup = async (req, res) => {
   const newUser = await authServices.signup(req.body);
-  console.log(newUser);
   res.status(201).json({
     user: { email: newUser.email, subscription: newUser.subscription },
   });
@@ -30,8 +31,12 @@ const signin = async (req, res) => {
     throw HttpError(401, "Email or password invalid");
   }
 
+  const { id } = user;
+
+  const contacts = await listContacts({ owner: id });
+
   const payload = {
-    id: user.id,
+    id,
   };
 
   const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "24h" });
@@ -39,16 +44,24 @@ const signin = async (req, res) => {
 
   res.json({
     token,
-    user: { email: user.email, subscription: user.subscription },
+    contacts,
   });
 };
-const getCurrentUser = (req, res) => {
-  const { email, subscription } = req.user;
-  res.json({ email, subscription });
+const getCurrentUser = async (req, res) => {
+  const { email, id } = req.user;
+  const contacts = await listContacts({ owner: id });
+  res.json({ email, contacts });
+};
+
+const logout = async (req, res) => {
+  const { id } = req.user;
+  await authServices.updateUser({ id }, { token: "" });
+  res.json({ message: "Logout success" });
 };
 
 export default {
   signup: ctrlWrapper(signup),
   signin: ctrlWrapper(signin),
   getCurrentUser: ctrlWrapper(getCurrentUser),
+  logout: ctrlWrapper(logout),
 };

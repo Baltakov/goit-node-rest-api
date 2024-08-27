@@ -6,8 +6,11 @@ import {
   createContact,
   updateContact,
 } from "../controllers/contactsControllers.js";
+import { authenticate } from "../middlewares/checkToken.js";
 
 const contactsRouter = express.Router();
+
+contactsRouter.use(authenticate);
 
 contactsRouter.get("/", getAllContacts);
 

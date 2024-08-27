@@ -1,9 +1,9 @@
 import {
   listContacts,
-  getContactById,
   removeContact,
   addContact,
   updateContactService,
+  getContact,
 } from "../services/contactsServices.js";
 
 import HttpError from "../helpers/HttpError.js";
@@ -12,9 +12,10 @@ import {
   updateContactSchema,
 } from "../schemas/contactsSchemas.js";
 
-export const getAllContacts = async (_, res, next) => {
+export const getAllContacts = async (req, res, next) => {
   try {
-    const contacts = await listContacts();
+    const { id: owner } = req.user;
+    const contacts = await listContacts({ owner });
     res.status(200).json(contacts);
   } catch (error) {
     next(error);
@@ -24,7 +25,8 @@ export const getAllContacts = async (_, res, next) => {
 export const getOneContact = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const contact = await getContactById(id);
+    const { id: owner } = req.user;
+    const contact = await getContact(id, owner);
     if (!contact) {
       throw HttpError(404, `Contact with id=${id} not found`);
     }
@@ -37,8 +39,8 @@ export const getOneContact = async (req, res, next) => {
 export const deleteContact = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const contact = await removeContact(id);
-    console.log(contact);
+    const { id: owner } = req.user;
+    const contact = await removeContact(id, owner);
     if (!contact) {
       throw HttpError(404, `Contact with id=${id} not found`);
     }
@@ -54,7 +56,8 @@ export const createContact = async (req, res, next) => {
     if (error) {
       throw HttpError(400, error.message);
     }
-    const contact = await addContact(req.body);
+    const { id: owner } = req.user;
+    const contact = await addContact({ ...req.body, owner });
     res.status(201).json(contact);
   } catch (error) {
     next(error);
@@ -71,8 +74,8 @@ export const updateContact = async (req, res, next) => {
       throw HttpError(400, error.message);
     }
     const { id } = req.params;
-    console.log(id);
-    const contact = await updateContactService(id, req.body);
+    const { id: owner } = req.user;
+    const contact = await updateContactService({ id, owner }, req.body);
     if (!contact) {
       throw HttpError(404, `Contact with id=${id} not found`);
     }

@@ -16,7 +16,7 @@ authRouter.post("/register", signupMiddleware, authControllers.signup);
 
 authRouter.post("/login", signupMiddleware, authControllers.signin);
 
-authRouter.post("/logout", signupMiddleware, authControllers.signin);
+authRouter.post("/logout", authenticate, authControllers.logout);
 
 authRouter.get("/current", authenticate, authControllers.getCurrentUser);
 
