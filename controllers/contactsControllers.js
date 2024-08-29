@@ -39,8 +39,7 @@ export const getOneContact = async (req, res, next) => {
 export const deleteContact = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { id: owner } = req.user;
-    const contact = await removeContact(id, owner);
+    const contact = await removeContact(id);
     if (!contact) {
       throw HttpError(404, `Contact with id=${id} not found`);
     }
@@ -56,9 +55,9 @@ export const createContact = async (req, res, next) => {
     if (error) {
       throw HttpError(400, error.message);
     }
-    const { id: owner } = req.user;
-    const contact = await addContact({ ...req.body, owner });
-    res.status(201).json(contact);
+    // const { id: owner } = req.user;
+    // const contact = await addContact({ ...req.body, owner });
+    // res.status(201).json(contact);
   } catch (error) {
     next(error);
   }
