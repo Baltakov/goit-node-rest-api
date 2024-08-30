@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import gravatar from "gravatar";
 
 import * as authServices from "../services/authServices.js";
 
@@ -14,9 +15,15 @@ import { listContacts } from "../services/contactsServices.js";
 const { JWT_SECRET } = process.env;
 
 const signup = async (req, res) => {
-  const newUser = await authServices.signup(req.body);
+  const avatarURL = gravatar.url(req.body.email);
+  const userData = { ...req.body, avatarURL };
+  const newUser = await authServices.signup(userData);
   res.status(201).json({
-    user: { email: newUser.email, subscription: newUser.subscription },
+    user: {
+      email: newUser.email,
+      subscription: newUser.subscription,
+      avatarURL: newUser.avatarURL,
+    },
   });
 };
 
@@ -33,8 +40,6 @@ const signin = async (req, res) => {
 
   const { id } = user;
 
-  const contacts = await listContacts({ owner: id });
-
   const payload = {
     id,
   };
@@ -44,7 +49,10 @@ const signin = async (req, res) => {
 
   res.json({
     token,
-    contacts,
+    user: {
+      email,
+      subscription: user.subscription,
+    },
   });
 };
 const getCurrentUser = async (req, res) => {

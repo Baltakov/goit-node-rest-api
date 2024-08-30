@@ -16,8 +16,7 @@ const Contact = sequelize.define("contact", {
   owner: {
     type: DataTypes.INTEGER,
     allowNull: false,
-  },
-  avatarURL: DataTypes.STRING,
+  }
 });
 
 // Contact.sync({ force: true });

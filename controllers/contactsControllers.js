@@ -1,3 +1,4 @@
+import * as fs from "node:fs/promises";
 import {
   listContacts,
   removeContact,
@@ -55,6 +56,8 @@ export const createContact = async (req, res, next) => {
     if (error) {
       throw HttpError(400, error.message);
     }
+    const { path: oldPath, fileName } = req.file;
+    await fs.rename(oldPath, newPath);
     // const { id: owner } = req.user;
     // const contact = await addContact({ ...req.body, owner });
     // res.status(201).json(contact);
