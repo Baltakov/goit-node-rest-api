@@ -27,12 +27,7 @@ contactsRouter.get("/:id", getOneContact); // moviesControllers.getMovies
 
 contactsRouter.delete("/:id", deleteContact);
 
-contactsRouter.post(
-  "/",
-  upload.single("avatar"),
-  addContactMiddleware,
-  createContact
-);
+contactsRouter.post("/", addContactMiddleware, createContact);
 
 contactsRouter.put("/:id", updateContactMiddleware, updateContact);
 

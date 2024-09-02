@@ -1,6 +1,8 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import gravatar from "gravatar";
+import path from "path";
+import fs from "node:fs/promises";
 
 import * as authServices from "../services/authServices.js";
 
@@ -9,6 +11,7 @@ import ctrlWrapper from "../decorators/ctrlWrapper.js";
 import HttpError from "../helpers/HttpError.js";
 
 import { listContacts } from "../services/contactsServices.js";
+import { rename } from "fs";
 
 // import { useInflection } from "sequelize";
 
@@ -67,9 +70,23 @@ const logout = async (req, res) => {
   res.json({ message: "Logout success" });
 };
 
+const updateAvatar = async (req, res) => {
+  if (!req.file) {
+    throw HttpError(400, "No file");
+  }
+  const { path: tempPath, originalname } = req.file;
+  const fileName = `${req.user.id}_${originalname}`;
+  const resultPath = path.resolve("public", "avatars", fileName);
+  await fs.rename(tempPath, resultPath);
+  const avatarURL = path.join("avatar", fileName);
+  await authServices.updateUser({ id: req.user.id }, { avatarURL });
+  res.json({ avatarURL: avatarURL });
+};
+
 export default {
   signup: ctrlWrapper(signup),
   signin: ctrlWrapper(signin),
   getCurrentUser: ctrlWrapper(getCurrentUser),
   logout: ctrlWrapper(logout),
+  updateAvatar: ctrlWrapper(updateAvatar),
 };
