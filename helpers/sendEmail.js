@@ -15,14 +15,6 @@ const nodemailerConfig = {
 
 const transport = nodemailer.createTransport(nodemailerConfig);
 
-/*
-const data = {
-    to: "deyipa4132@chaladas.com",
-    subject: "Test email",
-    html: "<strong>Test email</strong>",
-};
-*/
-
 const sendEmail = (data) => {
   const email = { ...data, from: UKR_NET_FROM };
 

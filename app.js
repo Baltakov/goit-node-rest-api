@@ -27,7 +27,7 @@ const transport = nodemailer.createTransport(nodemailerConfig);
 
 const email = {
   from: UKR_NET_FROM,
-  to: "momayew401@janfab.com",
+  to: "godoyan906@esterace.com",
   subject: "Test email",
   html: "<strong>Test email</strong>",
 };
